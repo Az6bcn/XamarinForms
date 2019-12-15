@@ -18,7 +18,7 @@ namespace NoteKepper.Views
         public ItemDetailPage(ItemDetailViewModel viewModel)
         {
             InitializeComponent();
-
+          
             BindingContext = this.viewModel = viewModel;
         }
 
