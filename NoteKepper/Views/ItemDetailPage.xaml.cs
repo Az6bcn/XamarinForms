@@ -35,5 +35,15 @@ namespace NoteKepper.Views
             viewModel = new ItemDetailViewModel(item);
             BindingContext = viewModel;
         }
+
+        public void Cancel_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("Cancel Option", "Cancel was Selected", "Button 2", "Button 1");
+        }
+
+        public void Save_Clicked(object sender, EventArgs e)
+        {
+            DisplayAlert("Save Option", "Save was Selected", "Button 2", "Button 1");
+        }
     }
 }

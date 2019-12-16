@@ -14,7 +14,12 @@ namespace NoteKepper
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
-            MainPage = new MainPage();
+
+            // MainPage set the root page i.e start up page when the App loads
+             MainPage = new MainPage(); // Default main page
+
+            // change applications MainPage (to ItemDetailPage) i.e start up page
+            // MainPage = new ItemDetailPage();
         }
 
         protected override void OnStart()
