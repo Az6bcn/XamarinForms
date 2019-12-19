@@ -10,20 +10,20 @@
             <Picker ItemsSource="{Binding CourseList}"
                     SelectedItem="{Binding Note.Course}"
                     x:Name="NoteCourse"
-                    Title="Note Course"
+                    Title="{Binding Note.Title}"
                     FontSize="Medium">
             </Picker>
 
 
         <!--<Entry x:Name="NoteHeading" FontSize="Medium" Placeholder="Note Heading"/>-->
 
-        <!--Bind to the properties of Note set in the behind code using ({Binding} : XAML Extension )-->
-         <Entry Text="{Binding Heading}"
+        <!--Bind to the properties our ViewModel assigned to this Pages BindingContext using ({Binding} : XAML Extension )-->
+         <Entry Text="{Binding NoteHeading}"
                 x:Name="NoteHeading"
                 FontSize="Medium"
                 Placeholder="Note Heading"/>
 
-        <Editor Text="{Binding Text}"
+        <Editor Text="{Binding NoteText}"
                 x:Name="NoteText"
                 AutoSize="TextChanges"
                 FontSize="Medium"

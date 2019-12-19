@@ -16,46 +16,31 @@ namespace NoteKepper.Views
     public partial class ItemDetailPage : ContentPage
     {
         ItemDetailViewModel viewModel;
-        public Note Note { get; set; }
-        public IList<string> CourseList { get; set; }
 
         public ItemDetailPage(ItemDetailViewModel viewModel)
         {
             InitializeComponent();
-            Init();
 
             // set Binding Context for this page
-            BindingContext = Note;
-            // set pickers binding context: this, so we can access any property in this class. else we can assign it to property that will hold the value
-            NoteCourse.BindingContext = this;
+            BindingContext = viewModel;
         }
 
         public ItemDetailPage()
         {
             InitializeComponent();
-            Init();
 
-            // set Binding Context for this page
-            BindingContext = Note;
-            // set pickers binding context
-            NoteCourse.BindingContext = this;
-        }
+            viewModel = new ItemDetailViewModel();
 
-        async void Init()
-        {
-            var pluralsightDataStore = new MockPluralsightDataStore();
-            CourseList = await pluralsightDataStore.GetCoursesAsync();
-
-            Note = new Note {
-                Heading = "Test Note",
-                Text = "Test for a test note",
-                Course = CourseList[0]
-            };
+            // set ViewModel has the Binding Context for this page
+            BindingContext = viewModel;
         }
 
         public void Cancel_Clicked(object sender, EventArgs e)
         {
-            DisplayAlert("Cancel Option", "Cancel was Selected", "Button 2", "Button 1");
+            viewModel.NoteHeading = "XXXXXXXXX";
+            DisplayAlert("Cancel Option",
+                $"Heading Value is {viewModel.NoteHeading}",
+                "Button 2", "Button 1");
         }
 
         public void Save_Clicked(object sender, EventArgs e)
