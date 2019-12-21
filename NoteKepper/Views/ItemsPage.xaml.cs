@@ -29,11 +29,29 @@ namespace NoteKepper.Views
 
         async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
         {
-            var item = args.SelectedItem as Item;
+            var item = args.SelectedItem as Note;
             if (item == null)
                 return;
 
-            await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
+            // Navigate to a new Page: ItemDetailViewModel
+            /*
+             * Performs hierarchical navigation, (hierarchical navigation => we can freely move from one page to another),
+             * we are navigating within the existing navigation page.
+             */
+
+            // await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
+
+            /*
+             * Performs a modal navigation and allows us to perform specific actions to leave that page
+             * i.e do stuff then pop the navigation stack to leave the page.
+             *
+             * To leave the page we have to pop the Page of the navigation stack, in the Page we going to.
+             *
+             * new NavigationPage(): makes it show the toolbar at the top (incase we need the toolbar to show buttons e.g cancel/save)
+             *
+             * without the new NavigationPage() our page won't have the toolbar.
+             */
+            await Navigation.PushModalAsync(new NavigationPage(new ItemDetailPage(new ItemDetailViewModel(item))), true);
 
             // Manually deselect item.
             ItemsListView.SelectedItem = null;
@@ -44,11 +62,15 @@ namespace NoteKepper.Views
             await Navigation.PushModalAsync(new NavigationPage(new ItemDetailPage()));
         }
 
+        /// <summary>
+        /// Is a Callback function that's called just before the Page becomes visible, its used
+        /// to execute or initiate some actions before the user sees the Page
+        /// </summary>
         protected override void OnAppearing()
         {
             base.OnAppearing();
 
-            if (viewModel.Items.Count == 0)
+            if (viewModel.Notes.Count == 0)
                 viewModel.LoadItemsCommand.Execute(null);
         }
     }

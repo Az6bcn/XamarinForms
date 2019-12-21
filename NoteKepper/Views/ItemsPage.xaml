@@ -4,23 +4,18 @@
         <ToolbarItem Text="Add" Clicked="AddItem_Clicked" />
     </ContentPage.ToolbarItems>
     <StackLayout>
-        <ListView x:Name="ItemsListView" ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand" HasUnevenRows="true" RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}" CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
-            <d:ListView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>First Item</x:String>
-                    <x:String>Second Item</x:String>
-                    <x:String>Third Item</x:String>
-                    <x:String>Fourth Item</x:String>
-                    <x:String>Fifth Item</x:String>
-                    <x:String>Sixth Item</x:String>
-                </x:Array>
-            </d:ListView.ItemsSource>
+        <ListView x:Name="ItemsListView" ItemsSource="{Binding Notes}" VerticalOptions="FillAndExpand" HasUnevenRows="true"
+                  RefreshCommand="{Binding LoadItemsCommand}" IsPullToRefreshEnabled="true" IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                  CachingStrategy="RecycleElement" ItemSelected="OnItemSelected">
+            <!--RefreshCommand is used to identify what function should be called/run when user pulls down on the list on their screen-->
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
+                        <!--StackLayout to arrange each item in the list-->
                         <StackLayout Padding="10">
-                            <Label Text="{Binding Text}" d:Text="{Binding .}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
-                            <Label Text="{Binding Description}" d:Text="Item descripton" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="13" />
+                            <!--Each field in the item is displayed in a label-->
+                            <Label Text="{Binding Course}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemTextStyle}" FontSize="16" />
+                            <Label Text="{Binding Heading}" LineBreakMode="NoWrap" Style="{DynamicResource ListItemDetailTextStyle}" FontSize="13" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

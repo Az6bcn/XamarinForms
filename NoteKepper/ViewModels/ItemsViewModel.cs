@@ -7,26 +7,43 @@ using Xamarin.Forms;
 
 using NoteKepper.Models;
 using NoteKepper.Views;
+using NoteKepper.Services;
 
 namespace NoteKepper.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        public ObservableCollection<Item> Items { get; set; }
+        /* It is designed to cooperate with data binding exposes events that enable us to notify the UI
+           when  change to the collection occurs, Add/Remove items.
+        */
+        public ObservableCollection<Note> Notes { get; set; }
         public Command LoadItemsCommand { get; set; }
 
         public ItemsViewModel()
         {
             Title = "Browse";
-            Items = new ObservableCollection<Item>();
+            Notes = new ObservableCollection<Note>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
-            {
-                var newItem = item as Item;
-                Items.Add(newItem);
-                await DataStore.AddItemAsync(newItem);
-            });
+            // Subscribe to Message Center Messages
+            MessagingCenter.Subscribe<ItemDetailPage, Note>(this, "SaveNote",
+                async (sender, note) => {
+                    // add to note collection observable: it will notify the interface when the collection changes so it can re-read 
+                    Notes.Add(note);
+
+                    // update note in store/db
+                    await PluralsightDataStore.AddNoteAsync(note);
+                });
+
+            MessagingCenter.Subscribe<ItemDetailPage, Note>(this, "UpdateNote",
+               async (sender, note) => {
+                   // Update note in data store
+                   await PluralsightDataStore.UpdateNoteAsync(note);
+                   // Modifying a member (our note) within an ObservableCollection
+                   //  does not automatically refresh data binding .. so explicitly
+                   //  repopulate the collection
+                   await ExecuteLoadItemsCommand();
+               });
         }
 
         async Task ExecuteLoadItemsCommand()
@@ -38,11 +55,11 @@ namespace NoteKepper.ViewModels
 
             try
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                Notes.Clear();
+                var items = await PluralsightDataStore.GetNotesAsync();
                 foreach (var item in items)
                 {
-                    Items.Add(item);
+                    Notes.Add(item);
                 }
             }
             catch (Exception ex)

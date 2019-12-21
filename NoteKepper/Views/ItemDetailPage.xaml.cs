@@ -17,12 +17,14 @@ namespace NoteKepper.Views
     {
         ItemDetailViewModel viewModel;
 
-        public ItemDetailPage(ItemDetailViewModel viewModel)
+        public ItemDetailPage(ItemDetailViewModel _viewModel)
         {
             InitializeComponent();
 
+            viewModel = _viewModel;
+
             // set Binding Context for this page
-            BindingContext = viewModel;
+            BindingContext = _viewModel;
         }
 
         public ItemDetailPage()
@@ -31,21 +33,29 @@ namespace NoteKepper.Views
 
             viewModel = new ItemDetailViewModel();
 
-            // set ViewModel has the Binding Context for this page
+            /* set a new instance of the ViewModel has the Binding Context for this page
+               when this ctor is used
+            */
             BindingContext = viewModel;
         }
 
-        public void Cancel_Clicked(object sender, EventArgs e)
+        public async void Cancel_Clicked(object sender, EventArgs e)
         {
-            viewModel.NoteHeading = "XXXXXXXXX";
-            DisplayAlert("Cancel Option",
-                $"Heading Value is {viewModel.NoteHeading}",
-                "Button 2", "Button 1");
+            await Navigation.PopModalAsync();
         }
 
-        public void Save_Clicked(object sender, EventArgs e)
+        public async void Save_Clicked(object sender, EventArgs e)
         {
-            DisplayAlert("Save Option", "Save was Selected", "Button 2", "Button 1");
+            if (!viewModel.IsNewNote)
+            {
+                MessagingCenter.Send(this, "UpdateNote", viewModel.Note);
+            }
+            else
+            {
+                MessagingCenter.Send(this, "SaveNote", viewModel.Note);
+            }
+
+            await Navigation.PopModalAsync();
         }
     }
 }

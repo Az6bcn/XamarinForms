@@ -9,6 +9,7 @@ namespace NoteKepper.ViewModels
     {
         public Note Note { get; set; }
         public IList<string> CourseList { get; set; }
+        public bool IsNewNote { get; set; }
 
 
         /* we need propeties that corresponds to each models properties in this viewModel
@@ -55,15 +56,11 @@ namespace NoteKepper.ViewModels
         }
 
 
-        public ItemDetailViewModel(Item item = null)
+        public ItemDetailViewModel(Note note = null)
         {
             CoursesListInit();
-            Title = item?.Text;
-            Note = new Note
-            {   Course = CourseList[0],
-                Heading = "Test Note",
-                Text = "Test for note in ViewModel"
-            };
+            Title = "Edit Note";
+            Note = note ?? new Note();
         }
 
 
